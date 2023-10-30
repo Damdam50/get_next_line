@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dalebran <dalebran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 08:59:12 by dalebran          #+#    #+#             */
-/*   Updated: 2023/10/30 10:40:17 by dalebran         ###   ########.fr       */
+/*   Updated: 2023/10/30 11:02:24 by dalebran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	*ft_memmove(void *dest, const void *src, int n)
 {
@@ -113,18 +113,18 @@ char	*get_line_from_remainder(char **remainder, int fd)
 
 char	*get_next_line(int fd)
 {
-	static char	*remainder;
+	static char	*remainder[MAX_FD];
 
 	if (BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
-		if (remainder)
+		if (remainder[fd])
 		{
-			free(remainder);
-			remainder = NULL;
+			free(remainder[fd]);
+			remainder[fd] = NULL;
 		}
 		return (NULL);
 	}
-	if (!remainder)
-		remainder = ft_strdup("");
-	return (get_line_from_remainder(&remainder, fd));
+	if (!remainder[fd])
+		remainder[fd] = ft_strdup("");
+	return (get_line_from_remainder(&remainder[fd], fd));
 }
